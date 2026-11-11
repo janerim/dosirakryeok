@@ -1,5 +1,7 @@
 import * as SQLite from 'expo-sqlite';
+import seedRecipes from '@/assets/recipes.json';
 import { migrate } from './migrations';
+import { syncSeedRecipes } from './seedRecipes';
 import type { Db } from './types';
 
 let dbPromise: Promise<Db> | null = null;
@@ -14,5 +16,6 @@ async function open(): Promise<Db> {
   const db = await SQLite.openDatabaseAsync('dosirakryeok.db');
   await db.execAsync('PRAGMA journal_mode = WAL');
   await migrate(db);
+  await syncSeedRecipes(db, seedRecipes);
   return db;
 }

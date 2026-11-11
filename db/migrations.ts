@@ -52,6 +52,30 @@ export const MIGRATIONS: ((db: Db) => Promise<void>)[] = [
       CREATE INDEX idx_shopping_item_week ON shopping_item(week);
     `);
   },
+
+  // v2: 먹음 처리 되돌리기 — 바꾸기 전 상태와, 먹을 때 줄인 재료를 적어 둔다
+  async (db) => {
+    await db.execAsync(`
+      ALTER TABLE meal_plan ADD COLUMN prev_status TEXT;
+
+      CREATE TABLE meal_consumption (
+        id            INTEGER PRIMARY KEY AUTOINCREMENT,
+        meal_plan_id  INTEGER NOT NULL REFERENCES meal_plan(id) ON DELETE CASCADE,
+        ingredient_id INTEGER NOT NULL REFERENCES ingredient(id) ON DELETE CASCADE
+      );
+      CREATE INDEX idx_meal_consumption_plan ON meal_consumption(meal_plan_id);
+    `);
+  },
+
+  // v3: 알림 설정 같은 앱 설정을 키-값으로 저장한다
+  async (db) => {
+    await db.execAsync(`
+      CREATE TABLE setting (
+        key   TEXT PRIMARY KEY,
+        value TEXT NOT NULL
+      );
+    `);
+  },
 ];
 
 /** 저장된 user_version 부터 최신까지 올린다. 버전 하나가 트랜잭션 하나다. */

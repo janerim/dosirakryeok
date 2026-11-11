@@ -19,6 +19,11 @@ export function listRecipeIngredients(db: Db, recipeId: number): Promise<RecipeI
   );
 }
 
+/** 모든 레시피의 재료. 메뉴 선택 화면에서 보유 재료와 견줄 때 쓴다. */
+export function listAllRecipeIngredients(db: Db): Promise<RecipeIngredient[]> {
+  return db.getAllAsync<RecipeIngredient>('SELECT * FROM recipe_ingredient ORDER BY id', []);
+}
+
 export async function updateRecipeIngredient(db: Db, id: number, input: RecipeIngredientInput): Promise<void> {
   await db.runAsync(
     'UPDATE recipe_ingredient SET recipe_id = ?, ingredient_name = ?, amount = ? WHERE id = ?',

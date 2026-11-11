@@ -2,15 +2,18 @@ import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { Colors } from '@/constants/colors';
 import { WEEKDAY_LABELS, type DayCell } from '@/hooks/useCalendar';
-import { CalendarCell } from './CalendarCell';
+import { CalendarCell, type CellMeal } from './CalendarCell';
 
 type Props = {
   weeks: DayCell[][];
+  /** 날짜(yyyy-MM-dd)별 그날의 도시락 */
+  meals: Record<string, CellMeal>;
+  onPressDay: (cell: DayCell) => void;
   onSwipeLeft?: () => void;
   onSwipeRight?: () => void;
 };
 
-export function CalendarGrid({ weeks, onSwipeLeft, onSwipeRight }: Props) {
+export function CalendarGrid({ weeks, meals, onPressDay, onSwipeLeft, onSwipeRight }: Props) {
   const { width: screenWidth } = useWindowDimensions();
   const cellWidth = screenWidth / 7;
 
@@ -48,6 +51,8 @@ export function CalendarGrid({ weeks, onSwipeLeft, onSwipeRight }: Props) {
                 key={cell.dateKey}
                 cell={cell}
                 width={cellWidth}
+                meal={meals[cell.dateKey]}
+                onPress={onPressDay}
               />
             ))}
           </View>

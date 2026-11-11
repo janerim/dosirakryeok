@@ -52,8 +52,9 @@ export type MealPlan = {
   date: string; // yyyy-MM-dd
   recipe_id: number;
   status: MealStatus;
+  prev_status: MealStatus | null; // 먹음·건너뜀으로 바꾸기 전 상태. 되돌릴 때 쓴다
 };
-export type MealPlanInput = Omit<MealPlan, 'id'>;
+export type MealPlanInput = Omit<MealPlan, 'id' | 'prev_status'>;
 
 export type ShoppingItem = {
   id: number;

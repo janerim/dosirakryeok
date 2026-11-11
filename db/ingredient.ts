@@ -17,6 +17,22 @@ export function listIngredients(db: Db): Promise<Ingredient[]> {
   return db.getAllAsync<Ingredient>('SELECT * FROM ingredient ORDER BY stored_date, id', []);
 }
 
+/** 많이 등록한 이름부터. 보관 위치는 그 이름으로 마지막에 등록한 것을 따른다. 소진한 것도 센다. */
+export function listFrequentIngredients(
+  db: Db,
+  limit: number
+): Promise<Pick<Ingredient, 'name' | 'storage'>[]> {
+  return db.getAllAsync(
+    `SELECT name,
+            (SELECT storage FROM ingredient b WHERE b.name = a.name ORDER BY b.id DESC LIMIT 1) AS storage
+       FROM ingredient a
+      GROUP BY name
+      ORDER BY COUNT(*) DESC, MAX(id) DESC
+      LIMIT ?`,
+    [limit]
+  );
+}
+
 export async function updateIngredient(db: Db, id: number, input: IngredientInput): Promise<void> {
   await db.runAsync(
     'UPDATE ingredient SET name = ?, storage = ?, stored_date = ?, amount = ?, is_used_up = ? WHERE id = ?',
