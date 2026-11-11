@@ -1,0 +1,11 @@
+export const Colors = {
+  primary: '#639922',
+  background: '#FFFFFF',
+  surface: '#F8F9FA',
+  textPrimary: '#1A1A1A',
+  textSecondary: '#6B7280',
+  border: '#E5E7EB',
+  saturday: '#4C84D6',
+  sunday: '#E06257',
+  todayBg: '#EAF3DE',
+} as const;

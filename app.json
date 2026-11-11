@@ -1,0 +1,19 @@
+{
+  "expo": {
+    "name": "도시락력",
+    "slug": "dosirakryeok",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "scheme": "dosirakryeok",
+    "ios": {
+      "supportsTablet": false
+    },
+    "plugins": [
+      "expo-router",
+      "expo-sqlite",
+      "expo-font"
+    ]
+  }
+}
